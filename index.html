@@ -1,0 +1,94 @@
+<html>
+<head>
+	<title></title>
+
+
+</head>
+<body>
+	<audio id="sound">
+		<source src="./test2.mp3" type="audio/mpeg"></source>
+	</audio>
+
+	<audio id="sound-actual">
+		<source src="./test2.mp3" type="audio/mpeg"></source>
+	</audio>
+
+	<div class="levels">
+	</div>
+
+
+	<script src="./bower_components/jquery/dist/jquery.min.js"></script>
+	<script>
+
+	$(function() {
+		setTimeout(function() {
+
+			test();
+		}, 2000);
+	});
+
+	var test = function() {
+
+		var bars = 15;
+
+		var barWidth = window.innerWidth / bars;
+
+		var padding = window.innerWidth;
+
+		for (var i = 0 ; i < bars ; i++) {
+
+			$(".levels").append("<div class='level-"+ i +"'><img width='" + barWidth + "' src='./images/shazy.png' class='level-image-" + i +"' />");
+
+			$(".level-" + i).css({
+				position: "fixed",
+				bottom: 0,
+				right: padding,
+				width: barWidth,
+				height: Math.floor(Math.random() * window.innerHeight),
+				backgroundColor: "white"
+			});
+
+			$('.level-image-' + i).css({
+				top: 0,
+				position: "absolute"
+			});
+
+
+			padding -= barWidth;
+		}
+
+		var ctx = new AudioContext();
+		var audio = document.getElementById('sound');
+		var audioActual = document.getElementById('sound-actual');
+
+		var audioSrc = ctx.createMediaElementSource(audio);
+		var analyser = ctx.createAnalyser(audioSrc);
+		audioSrc.connect(analyser);
+
+		var frequencyData = new Uint8Array(analyser.frequencyBinCount);
+
+		function renderFrame() {
+			requestAnimationFrame(renderFrame);
+			analyser.getByteFrequencyData(frequencyData);
+
+			for (var i = 0; i < bars; i++) {
+				$(".level-" + i).css({
+					height: frequencyData[i] * 3
+				});
+			}
+		}
+
+		renderFrame();
+
+		document.querySelector('body').addEventListener('click', function() {
+			audio.play();
+			audioActual.play();
+		});
+
+
+
+	}
+
+</script>
+</body>
+</html>

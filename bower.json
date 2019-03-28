@@ -1,0 +1,18 @@
+{
+  "name": "audio",
+  "authors": [
+    "Sameid Usmani <sameid.usmani@gmail.com>"
+  ],
+  "description": "test",
+  "main": "index.html",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
